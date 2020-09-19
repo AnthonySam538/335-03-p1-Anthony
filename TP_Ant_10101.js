@@ -1,3 +1,17 @@
+/* Author: Anthony Sam (anthonysam538@csu.fullerton.edu)
+This is the javascript file. While the .html file contains the programming 
+for the html page, this .js file contains the programming for the ant. The 
+setup() function will automatically be called at the start, and the draw() 
+function will be called on every frame. The keyPressed() function will be 
+called when a key on the keyboard is pressed and the mousePressed() 
+function will be called when the user clicks the mouse. fillCurrentSquare() 
+is a function that can be called from within other functions. 
+In this case, it's called within draw() and mousePressed(). This .js file 
+uses a 2-D array that contains numbers associated with each of the 5 
+colors. By checking the number of a selected spot in the array, the ant is 
+able to determine what color it is on so that it can change direction and 
+change the tile's color. */
+
 function setup() // p5.js setup function
 {
     /* Create a JavaScript object named "grid." This will contain handy information about the grid of cells.
@@ -25,32 +39,14 @@ function setup() // p5.js setup function
     bot = { direction: 0, x: int(grid.width / 2), y: int(grid.height / 2) };
 }
 
-function draw()
+function draw() // p5.js draw function
 {
     noStroke() // no outlines
 
-    /* // Draw the bot based on its current direction (bot.direction) and coordinates (bot.x & bot.y)
-    fill('white');
-    switch (bot.direction)
-    {
-        case 0:
-            triangle((bot.x + 0.5) * grid.cell_size, bot.y * grid.cell_size, bot.x * grid.cell_size, (bot.y + 1) * grid.cell_size, (bot.x + 1) * grid.cell_size, (bot.y + 1) * grid.cell_size);
-            break;
-        case 1:
-            triangle((bot.x + 1) * grid.cell_size, (bot.y + 0.5) * grid.cell_size, bot.x * grid.cell_size, bot.y * grid.cell_size, bot.x * grid.cell_size, (bot.y + 1) * grid.cell_size);
-            break;
-        case 2:
-            triangle((bot.x + 0.5) * grid.cell_size, (bot.y + 1) * grid.cell_size, (bot.x + 1) * grid.cell_size, bot.y * grid.cell_size, bot.x * grid.cell_size, bot.y * grid.cell_size);
-            break;
-        default:
-            triangle(bot.x * grid.cell_size, (bot.y + 0.5) * grid.cell_size, (bot.x + 1) * grid.cell_size, (bot.y + 1) * grid.cell_size, (bot.x + 1) * grid.cell_size, bot.y * grid.cell_size);
-            break;
-    } */
-
-    // Use the bot's current coordinates to determine what color it's standing on. Change its direction accordingly.
-    if (grid.colors[bot.x][bot.y] % 2) // if the bot is standing on either a red or blue tile, then increment bot.direction
+    // Change the bot's direction by looking at its current coordinates.
+    if (grid.colors[bot.x][bot.y] % 2) // if the bot is standing on either a red or blue tile, then increment bot.direction (Turn 90 degrees clockwise)
         bot.direction = ++bot.direction % 4;
-    else // if the bot is standing on either a black, yellow, or green tile, then decrement bot.direction
+    else // if the bot is standing on either a black, yellow, or green tile, then decrement bot.direction (Turn 90 degrees counterclockwise)
     {
         if (bot.direction)
             --bot.direction;
@@ -59,28 +55,10 @@ function draw()
     }
 
     // Increment the color of the tile that the bot's standing on
-    grid.colors[bot.x][bot.y] = ++grid.colors[bot.x][bot.y] % 5;
-    switch (grid.colors[bot.x][bot.y])
-    {
-        case 0:
-            fill('black');
-            break;
-        case 1:
-            fill('red');
-            break;
-        case 2:
-            fill('yellow');
-            break;
-        case 3:
-            fill('blue');
-            break;
-        case 4:
-            fill('green');
-            break;
-    }
-    rect(bot.x * grid.cell_size, bot.y * grid.cell_size, grid.cell_size, grid.cell_size);
+    grid.colors[bot.x][bot.y] = ++grid.colors[bot.x][bot.y] % 5; // change the value in the 2-D array
+    fillCurrentSquare();
     
-    // Update the bot's coordinates by using its old coordinates and its new direction
+    // Update the bot's coordinates by using its current coordinates and its new direction
     fill('white');
     switch(bot.direction)
     {
@@ -121,11 +99,37 @@ function mousePressed()
 {
     // console.log("Mouse (x,y): (" + x_position + ',' + y_position + ')');
 
+    // First, remove the bot from where it currently is by drawing the tile it's standing on over the bot
+    fillCurrentSquare();
+    
+    // Then, move the bot to where the mouse clicked
     if (mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) // if the user clicked in the canvas
     {
         bot.x = floor(round(mouseX) / grid.cell_size); // change the x-coordinate of the bot
         bot.y = floor(round(mouseY) / grid.cell_size); // change the y-coordinate of the bot
     }
+}
 
-    // Remove the triangle from the display
+// This code snippet was used twice, so I thought I'd put it in a function
+function fillCurrentSquare()
+{
+    switch (grid.colors[bot.x][bot.y]) // change the color we are currently using
+    {
+        case 0:
+            fill('black');
+            break;
+        case 1:
+            fill('red');
+            break;
+        case 2:
+            fill('yellow');
+            break;
+        case 3:
+            fill('blue');
+            break;
+        case 4:
+            fill('green');
+            break;
+    }
+    rect(bot.x * grid.cell_size, bot.y * grid.cell_size, grid.cell_size, grid.cell_size); // draw the square
 }
