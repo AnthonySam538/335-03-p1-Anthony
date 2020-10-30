@@ -1,4 +1,4 @@
-# Project 1: Cella Ant #x15
+# CPSC335 Algorithm Engineering - Project 1: Cella Ant #x15
 ###### CPSC 335-03 Algorithm Engineering
 ###### Team Anthony: Anthony Sam (anthonysam538@csu.fullerton.edu)
 
